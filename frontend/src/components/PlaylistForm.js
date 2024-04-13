@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { usePlaylistsContext } from "../hooks/usePlaylistsContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const PlaylistForm = () => {
     const {dispatch} = usePlaylistsContext()
+    const { user } = useAuthContext()
 
     const [playlistId, setPlaylistId] = useState('');
     const [playlistName, setPlaylistName] = useState('');
@@ -12,13 +14,19 @@ const PlaylistForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if(!user) {
+            setError('You must be logged in')
+            return
+        }
+
         const playlist = {playlistId, playlistName};
         
         const response = await fetch('/api/playlists/', {
             method: 'POST',
             body: JSON.stringify(playlist),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
         })
         const json = await response.json();

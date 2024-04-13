@@ -36,7 +36,11 @@ const playlistSchema = new Schema({
             type: Boolean,
             required: true
         }
-    }]
+    }],
+    userId: {
+        type: String,
+        required: true
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Playlist', playlistSchema);

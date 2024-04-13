@@ -6,8 +6,12 @@ const {
     deletePlaylist,
     updatePlaylist
 } = require('../controllers/playlistController');
+const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router();
+
+// require auth for all playlist routes
+router.use(requireAuth)
 
 // GET all playlists
 router.get('/', getPlaylists);

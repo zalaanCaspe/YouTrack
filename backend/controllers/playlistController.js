@@ -1,6 +1,7 @@
 const Playlist = require('../models/playlistModel');
 const mongoose = require('mongoose');
 const youtube = require('@googleapis/youtube');
+const { findById } = require('../models/userModel');
 
 
 // create google api client for youtube
@@ -9,7 +10,7 @@ const ytClient = youtube.youtube({
   auth: process.env.API_KEY
 });
 
-const retreiveFromYt = async (playlistId, res) => {
+const retreiveFromYt = async (playlistId) => {
   var videos = []
   
   try {
@@ -17,8 +18,8 @@ const retreiveFromYt = async (playlistId, res) => {
     do {
       // retrieve 50 videos
       let response = await ytClient.playlistItems.list({
-        part: process.env.RESPONSE_PART, 
-        maxResults: process.env.MAX_RESULTS, 
+        part: 'snippet', 
+        maxResults: 5000, 
         pageToken: nextPageToken,
         playlistId
       })
@@ -30,7 +31,8 @@ const retreiveFromYt = async (playlistId, res) => {
           "channelId": video.snippet.channelId,
           "channelTitle": video.snippet.channelTitle,
           "position": video.snippet.position,
-          "isAvailable": true
+          "isAvailable": video.snippet.title !=="Deleted Video" && video.snippet.title !== "Private Video",
+          "isNewVideo": true
         })
       })
       
@@ -45,7 +47,9 @@ const retreiveFromYt = async (playlistId, res) => {
 
 // get all Playlists
 const getPlaylists = async (req, res) => {
-  const playlists = await Playlist.find({}).sort({createdAt: -1});
+  const userId = req.user._id
+
+  const playlists = await Playlist.find({ userId }).sort({createdAt: -1});
 
   res.status(200).json(playlists);
 }
@@ -84,14 +88,14 @@ const createPlaylist = async (req, res) => {
 
   const videos = await retreiveFromYt(playlistId);
   if (videos.hasOwnProperty("errors") && videos.errors[0].reason == "playlistNotFound") {
-    console.log("Invalid Playlist??")
     errorFields.push('playlistId')
     return res.status(400).json({error: "Please enter a valid playlist ID", errorFields});
   }
 
+  // add doc to db
   try {
-    // add doc to db
-    const playlist = await Playlist.create({playlistId, playlistName, videos});
+    const userId = req.user._id
+    const playlist = await Playlist.create({playlistId, playlistName, videos, userId});
     res.status(200).json(playlist)
   } catch (error) {
     res.status(400).json({error: error.message})

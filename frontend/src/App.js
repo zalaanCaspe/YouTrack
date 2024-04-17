@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
+import PlaylistPage from './pages/PlaylistPage';
 
 function App() {
   const { user } = useAuthContext()
@@ -20,6 +21,10 @@ function App() {
             <Route
               path='/'
               element={user ? <Home /> : <Navigate to="/login" />}
+            />
+            <Route
+              path='/playlists/:id'
+              element={user ? <PlaylistPage /> : <Navigate to="/login" />}
             />
             <Route
               path='/login'

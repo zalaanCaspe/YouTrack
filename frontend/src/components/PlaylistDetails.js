@@ -1,5 +1,6 @@
 import { usePlaylistsContext } from '../hooks/usePlaylistsContext'
 import { useAuthContext } from '../hooks/useAuthContext'
+import { Link } from 'react-router-dom'
 
 // date fns
 import format from 'date-fns/format'
@@ -29,9 +30,11 @@ const PlaylistDetails = ({ playlist }) => {
 
     return (
         <div className="playlist-details">
-            <h4>{playlist.playlistName}</h4>
-            <p><strong>Last Updated: </strong>{format(new Date(playlist.updatedAt), "MMM dd, yyyy 'at' hh:mmaaa")}</p>
-            <p>{formatDistanceToNow(new Date(playlist.createdAt), {addSuffix: true})}</p>
+            <Link to={`/playlists/${playlist._id}`}>
+                <h4>{playlist.playlistName}</h4>
+                <p><strong>Last Updated: </strong>{format(new Date(playlist.updatedAt), "MMM dd, yyyy 'at' hh:mmaaa")}</p>
+                <p>{formatDistanceToNow(new Date(playlist.createdAt), {addSuffix: true})}</p>
+            </Link>
             <span onClick={handleClick} className='material-symbols-outlined'>delete</span>
         </div>
     );

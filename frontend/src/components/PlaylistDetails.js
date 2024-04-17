@@ -33,7 +33,7 @@ const PlaylistDetails = ({ playlist }) => {
             <Link to={`/playlists/${playlist._id}`}>
                 <h4>{playlist.playlistName}</h4>
                 <p><strong>Last Updated: </strong>{format(new Date(playlist.updatedAt), "MMM dd, yyyy 'at' hh:mmaaa")}</p>
-                <p>{formatDistanceToNow(new Date(playlist.createdAt), {addSuffix: true})}</p>
+                <p>{"Added "+ formatDistanceToNow(new Date(playlist.createdAt), {addSuffix: true})}</p>
             </Link>
             <span onClick={handleClick} className='material-symbols-outlined'>delete</span>
         </div>

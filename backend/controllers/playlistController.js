@@ -1,7 +1,6 @@
 const Playlist = require('../models/playlistModel');
 const mongoose = require('mongoose');
 const youtube = require('@googleapis/youtube');
-const { findById } = require('../models/userModel');
 
 
 // create google api client for youtube
@@ -25,7 +24,7 @@ const retreiveFromYt = async (playlistId) => {
       })
       // add the necessary fields of the videos to an array
       response.data.items.forEach(video => {
-        var isAvailable = video.snippet.thumbnails.hasOwnProperty('default') // !=="Deleted video" && video.snippet.title !== "Private video";
+        var isAvailable = video.snippet.thumbnails.hasOwnProperty('default')
         videos.push({
           "videoId": video.snippet.resourceId.videoId,
           "title": video.snippet.title,
@@ -50,7 +49,7 @@ const retreiveFromYt = async (playlistId) => {
 const getPlaylists = async (req, res) => {
   const userId = req.user._id
 
-  const playlists = await Playlist.find({ userId }).sort({createdAt: -1});
+  const playlists = await Playlist.find({ userId }).sort({updatedAt: -1});
 
   res.status(200).json(playlists);
 }
@@ -135,7 +134,7 @@ const deleteVideo = async (req, res) => {
     $pull: {
       videos:  {_id: videoId}
     }
-  })
+  }, {new: true})
 
   res.status(200).json({playlist})
 }
@@ -143,20 +142,46 @@ const deleteVideo = async (req, res) => {
 // update a Playlist
 const updatePlaylist = async (req, res) => {
   const { playlistId } = req.params
-
   if (!mongoose.Types.ObjectId.isValid(playlistId)) {
     return res.status(404).json({error: 'No such playlist'})
   }
 
-  const playlist = await Playlist.findOneAndUpdate({_id: playlistId}, {
-    ...req.body
+  const oldPlaylist = await Playlist.findById(playlistId)
+  var oldVideos = oldPlaylist.videos
+
+  const newVideos = await retreiveFromYt(oldPlaylist.playlistId)
+  if (newVideos.hasOwnProperty("errors") && newVideos.error[0].reason == "playlistNotFound") {
+    return res.status(400).json({error: "Playlist no longer available"})
+  }
+
+  // update position, availability and new status
+  var removedVids = []
+  oldVideos.forEach(oldVid => {
+    var newVid = newVideos.find(v => v.videoId === oldVid.videoId)
+    if (!newVid) {
+      removedVids.push(oldVid)
+    } else {
+      oldVid.isNewVideo = false
+      oldVid.position = newVid.position
+      oldVid.isAvailable = newVid.isAvailable
+      newVideos.splice(newVideos.indexOf(newVid), 1)
+      delete oldVid._id
+    }
   })
+  oldVideos = oldVideos.filter(v => !removedVids.includes(v))
+
+  // update database
+  const updatedVideos = oldVideos.concat(newVideos).sort((a,b) => a.position - b.position)
+
+  const playlist = await Playlist.findOneAndUpdate({_id: playlistId}, {
+    videos: updatedVideos
+  }, {new: true})
 
   if (!playlist) {
     return res.status(400).json({error: 'No such playlist'})
   }
 
-  res.status(200).json({mssg: "updated playlist"})
+  res.status(200).json(playlist)
 }
 
 

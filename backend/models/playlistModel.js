@@ -35,6 +35,10 @@ const playlistSchema = new Schema({
         isAvailable: {
             type: Boolean,
             required: true
+        },
+        isNewVideo: {
+            type: Boolean,
+            required: true
         }
     }],
     userId: {

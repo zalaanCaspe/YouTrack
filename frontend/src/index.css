@@ -202,6 +202,21 @@ form.signup, form.login {
   color: #333;
 }
 
+.unavailable {
+  background-color: #e7195a;
+}
+
+.new-video {
+  background-color: #1aac83;
+}
+
+.new-video:hover,
+.new-video:focus,
+.unavailable:hover,
+.unavailable:focus {
+  background-color: black;
+}
+
 .video-item {
   display: flex;
   align-items: center;

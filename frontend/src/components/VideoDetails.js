@@ -29,7 +29,7 @@ const VideoDetails = (props) => {
     }
     
     return (
-        <div className="video-container">
+        <div className={`video-container ${video.isAvailable ? '' : "unavailable"} ${video.isNewVideo ? "new-video" : ""}`}>
             <Link 
                 className="video-item" 
                 to={`https://youtu.be/${video.videoId}`} 

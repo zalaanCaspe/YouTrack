@@ -9,6 +9,23 @@ const PlaylistPage = () => {
     const {user} = useAuthContext();
     const {videos, dispatch} = useVideosContext()
 
+    const handleUpdate = async () => {
+        if (!user) {
+            return
+        }
+        const response = await fetch('/api/playlists/' + id, {
+            method: "PATCH",
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
+        const json = await response.json()
+
+        if (response.ok) {
+            dispatch({type: 'SET_VIDEOS', payload: json.videos})
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`/api/playlists/${id}`, {
@@ -32,7 +49,7 @@ const PlaylistPage = () => {
     return (
         <div className="playlist-container">
             <div className="playlist-control">
-                <button className="material-symbols-outlined update-button">update</button>
+                <button className="material-symbols-outlined update-button" onClick={handleUpdate}>update</button>
                 <button className="material-symbols-outlined delete-button">delete_forever</button>
             </div>
             {(!videos || videos.length===0) && (<p>This playlist is empty!</p>)}

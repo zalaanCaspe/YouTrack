@@ -10,7 +10,7 @@ const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router();
 
-// require auth for all playlist routes
+// require auth for all app routes
 router.use(requireAuth)
 
 // GET all playlists

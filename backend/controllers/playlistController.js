@@ -25,13 +25,14 @@ const retreiveFromYt = async (playlistId) => {
       })
       // add the necessary fields of the videos to an array
       response.data.items.forEach(video => {
+        var isAvailable = video.snippet.thumbnails.hasOwnProperty('default') // !=="Deleted video" && video.snippet.title !== "Private video";
         videos.push({
           "videoId": video.snippet.resourceId.videoId,
           "title": video.snippet.title,
-          "channelId": video.snippet.channelId,
-          "channelTitle": video.snippet.channelTitle,
+          "channelId": isAvailable ? video.snippet.videoOwnerChannelId : 'Unavailable',
+          "channelTitle": isAvailable ? video.snippet.videoOwnerChannelTitle : 'Unavailable',
           "position": video.snippet.position,
-          "isAvailable": video.snippet.title !=="Deleted Video" && video.snippet.title !== "Private Video",
+          "isAvailable": isAvailable,
           "isNewVideo": true
         })
       })

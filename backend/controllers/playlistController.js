@@ -120,6 +120,26 @@ const deletePlaylist = async (req, res) => {
   res.status(200).json(playlist)
 }
 
+// delete a video from a playlist aka update the playlist videos
+const deleteVideo = async (req, res) => {
+  const { playlistId, videoId } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(playlistId)) {
+    return res.status(404).json({error: 'No such playlist'})
+  }
+  if (!mongoose.Types.ObjectId.isValid(videoId)) {
+    return res.status(404).json({error: 'No such video'})
+  }
+
+  const playlist = await Playlist.findOneAndUpdate({_id: playlistId}, {
+    $pull: {
+      videos:  {_id: videoId}
+    }
+  })
+
+  res.status(200).json({playlist})
+}
+
 // update a Playlist
 const updatePlaylist = async (req, res) => {
   const { playlistId } = req.params
@@ -139,13 +159,12 @@ const updatePlaylist = async (req, res) => {
   res.status(200).json({mssg: "updated playlist"})
 }
 
-// DELETE a single video from a playlist
-
 
 module.exports = {
   getPlaylists,
   getPlaylist,
   createPlaylist,
   deletePlaylist,
+  deleteVideo,
   updatePlaylist
 }

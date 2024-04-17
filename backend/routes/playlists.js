@@ -4,6 +4,7 @@ const {
     getPlaylists,
     getPlaylist,
     deletePlaylist,
+    deleteVideo,
     updatePlaylist
 } = require('../controllers/playlistController');
 const requireAuth = require('../middleware/requireAuth')
@@ -24,6 +25,9 @@ router.post('/', createPlaylist);
 
 // DELETE a playlist
 router.delete('/:playlistId', deletePlaylist);
+
+// UPDATE a playlist to remove a video
+router.patch('/:playlistId/:videoId', deleteVideo);
 
 // UPDATE a playlist
 router.patch('/:playlistId', updatePlaylist);

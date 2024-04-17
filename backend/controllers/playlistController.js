@@ -130,13 +130,13 @@ const deleteVideo = async (req, res) => {
     return res.status(404).json({error: 'No such video'})
   }
 
-  const playlist = await Playlist.findOneAndUpdate({_id: playlistId}, {
+  await Playlist.findOneAndUpdate({_id: playlistId}, {
     $pull: {
       videos:  {_id: videoId}
     }
-  }, {new: true})
+  })
 
-  res.status(200).json({playlist})
+  res.status(200).json({videoId})
 }
 
 // update a Playlist

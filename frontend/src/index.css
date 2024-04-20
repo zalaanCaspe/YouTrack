@@ -3,18 +3,18 @@
 
 /* layout */
 :root {
-  --primary: #1aac83;
+  --primary: #45a3fb;
   --error: #e7195a;
 }
 
 body {
-  background: #f1f1f1;
+  background: #25282c;
   margin: 0;
   font-family: "Poppins";
 }
 
 header {
-  background-color: #fff;
+  background-color: #111417;
 }
 
 header .container {
@@ -27,8 +27,13 @@ header .container {
 }
 
 header a {
-  color: #333;
+  color: #ff4d4f;
   text-decoration: none;
+}
+
+header span {
+  color: #ddd;
+  margin-right: 15px;
 }
 
 .pages {
@@ -40,22 +45,24 @@ header a {
 /* homepage */
 .home {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 100px;
 }
 
 .playlist-details {
-  background: #fff;
+  background: #111417;
   border-radius: 4px;
   margin: 20px auto;
   padding: 20px;
   position: relative;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0,05);
-  transition: 150ms;
+  box-shadow: 1px 1px 5px #111417c1;
+  border: 1px solid transparent;
+  transition: 250ms;
 }
 
 .playlist-details:hover {
-  background-color: rgb(299, 299, 249);
+  border: 1px solid var(--primary);
+  box-shadow: 3px 3px 5px #45a3fb;
 }
 
 .playlist-details a {
@@ -71,7 +78,7 @@ header a {
 .playlist-details p {
   margin: 0;
   font-size: 0.9em;
-  color: #555;
+  color: #d3d4d1;
 }
 
 .playlist-details span {
@@ -79,15 +86,33 @@ header a {
   top: 20px;
   right: 20px;
   cursor: pointer;
-  background: #f1f1f1;
+  background: #25282c;
   padding: 6px;
   border-radius: 50%;
-  color: #333;
+  color: #d3d4d1;
+  transition: 100ms;
+}
+
+.playlist-details span:hover {
+  background-color: var(--error);
 }
 
 /* new playlist form */
+.create {
+  background-color: #111417;
+  border-radius: 4px;
+  margin-top: 20px;
+  padding: 20px;
+  box-shadow: 1px 1px 5px #111417c1;
+}
+
+.create h3 {
+  color: #d3d4d1;
+}
+
 label, input {
-  display: block
+  display: block;
+  color: #fff;
 }
 
 input {
@@ -95,9 +120,11 @@ input {
   margin-top: 10px;
   margin-bottom: 20px;
   width: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid #303337;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: #303337;
+  color: #fff;
 }
 
 form button {
@@ -112,7 +139,7 @@ form button {
 
 div.error {
   padding: 10px;
-  background: #ffefef;
+  background: #303337;
   border: 1px solid var(--error);
   color: var(--error);
   border-radius: 4px;
@@ -132,7 +159,7 @@ nav a {
   margin-left: 10px;
 }
 nav button {
-  background: #fff;
+  background: #111417;
   color: var(--primary);
   border: 2px solid var(--primary);
   padding: 6px 10px;
@@ -141,6 +168,12 @@ nav button {
   cursor: pointer;
   font-size: 1em;
   margin-left: 20px;
+  transition: 150ms
+}
+
+nav button:hover {
+  background-color: #45a3fb;
+  color: #111417;
 }
 
 /* auth forms */
@@ -148,10 +181,19 @@ form.signup, form.login {
   max-width: 400px;
   margin: 40px auto;
   padding: 20px;
-  background: #fff;
+  background: #111417;
+  color: #d3d4d1;
   border-radius: 4px;
 }
 
+
+/* Playlist page */
+.playlist-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #111417;
+  border-radius: 8px;
+}
 
 /* playlist controls */
 .playlist-control {
@@ -166,10 +208,9 @@ form.signup, form.login {
   width: 25%;
   border: none;
   font-size: 2em;
-  background-color: #f2f2f2;
   border-radius: 4px;
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.75;
   transition: 300ms;
 }
 
@@ -188,27 +229,23 @@ form.signup, form.login {
 
 
 /* Video details */
-.playlist-container {
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-
 .video-container a {
   text-decoration: none;
-  color: #333;
+  color: #d3d4d1;
+  border-radius: 4px;
 }
 
 .video-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 5px 0px;
+  margin-bottom: 5px;
   transition: 50ms;
+  border-bottom: 1px solid #25282c77;
 }
 
 .video-item:hover {
-  background-color: #ddd;
+  background-color: #25282c;
 }
 
 .video-position {
@@ -218,6 +255,7 @@ form.signup, form.login {
 .video-thumbnail {
   flex: 0 0 120px;
   margin-right: 10px;
+  display: flex;
 }
 
 .video-thumbnail img {
@@ -242,13 +280,19 @@ form.signup, form.login {
 }
 
 .video-item button {
+  visibility: hidden;
   padding: 8px;
   margin-right: 15px;
   border: none;
-  background-color: #f2f2f2;
+  background-color: #25282c;
+  color: #d3d4d1;
   border-radius: 4px;
   cursor: pointer;
-  transition: 100ms;
+  transition: background-color 100ms;
+}
+
+.video-item:hover > button {
+  visibility: visible;
 }
 
 .video-item button:hover {

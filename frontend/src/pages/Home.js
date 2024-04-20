@@ -37,7 +37,9 @@ const Home = () => {
                     <PlaylistDetails playlist={playlist} key={playlist._id} />
                 ))}
             </div>
-            <PlaylistForm />
+            <div className="form">
+                <PlaylistForm />
+            </div>
 
         </div>
     );

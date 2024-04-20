@@ -54,8 +54,7 @@ header a {
   transition: 150ms;
 }
 
-.playlist-details:hover,
-.playlist-details:focus {
+.playlist-details:hover {
   background-color: rgb(299, 299, 249);
 }
 
@@ -174,8 +173,7 @@ form.signup, form.login {
   transition: 300ms;
 }
 
-.playlist-control button:hover,
-.playlist-control button:focus {
+.playlist-control button:hover {
   opacity: 1;
   color: white;
 }
@@ -184,8 +182,8 @@ form.signup, form.login {
   background: var(--primary);
 }
 
-.playlist-control .delete-button {
-  background: var(--error);
+.playlist-control .open-button {
+  background: #94E599;
 }
 
 
@@ -209,8 +207,7 @@ form.signup, form.login {
   transition: 50ms;
 }
 
-.video-item:hover,
-.video-item:focus {
+.video-item:hover {
   background-color: #ddd;
 }
 

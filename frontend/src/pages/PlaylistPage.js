@@ -26,6 +26,23 @@ const PlaylistPage = () => {
         }
     }
 
+    const handleRedirect = async () => {
+        if (!user) {
+            return
+        }
+        const response = await fetch('/api/playlists/' + id, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
+        const json = await response.json()
+
+        if (response.ok) {
+            window.open(`https://www.youtube.com/playlist?list=${json.playlistId}`, '_blank');
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`/api/playlists/${id}`, {
@@ -50,7 +67,7 @@ const PlaylistPage = () => {
         <div className="playlist-container">
             <div className="playlist-control">
                 <button className="material-symbols-outlined update-button" onClick={handleUpdate}>update</button>
-                <button className="material-symbols-outlined delete-button">delete_forever</button>
+                <button className="material-symbols-outlined open-button" onClick={handleRedirect}>open_in_new</button>
             </div>
             {(!videos || videos.length===0) && (<p>This playlist is empty!</p>)}
             {videos && videos.map(video => (

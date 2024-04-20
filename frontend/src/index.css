@@ -49,6 +49,11 @@ header span {
   gap: 100px;
 }
 
+.playlists p,
+.playlist-container p {
+  color: #ddd;
+}
+
 .playlist-details {
   background: #111417;
   border-radius: 4px;
